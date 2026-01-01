@@ -12,7 +12,7 @@ A modern lightweight web interface for qBittorrent, built with Vite.
 - Detailed torrent view (general info, trackers, peers, files)
 - Filter by status (all, downloading, seeding, active, stopped), filter by tracker or category.
 - Multi-select with bulk actions (start, stop, delete)
-- Dark theme
+- Multiple themes to pick from
 
 ## Docker
 
