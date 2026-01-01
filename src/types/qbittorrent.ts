@@ -43,6 +43,7 @@ export interface Torrent {
 	downloaded: number
 	uploaded: number
 	tracker: string
+	seeding_time: number
 }
 
 export interface TransferInfo {

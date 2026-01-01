@@ -6,10 +6,12 @@ import { FilterBar, SearchInput, CategoryDropdown, TagDropdown, TrackerDropdown 
 import { AddTorrentModal } from './AddTorrentModal'
 import { TorrentDetailsPanel } from './TorrentDetailsPanel'
 import { ContextMenu } from './ContextMenu'
+import { RatioThresholdPopup } from './RatioThresholdPopup'
+import { loadRatioThreshold, saveRatioThreshold } from '../utils/ratioThresholds'
 
 const DEFAULT_PANEL_HEIGHT = 220
 
-type SortKey = 'name' | 'size' | 'progress' | 'downloaded' | 'uploaded' | 'dlspeed' | 'upspeed' | 'ratio' | 'added_on'
+type SortKey = 'name' | 'size' | 'progress' | 'downloaded' | 'uploaded' | 'dlspeed' | 'upspeed' | 'ratio' | 'seeding_time' | 'added_on'
 
 function SortIcon({ active, asc }: { active: boolean; asc: boolean }) {
 	return (
@@ -68,6 +70,8 @@ export function TorrentList() {
 		return stored ? parseInt(stored, 10) : DEFAULT_PANEL_HEIGHT
 	})
 	const [contextMenu, setContextMenu] = useState<{ x: number; y: number; torrents: Torrent[] } | null>(null)
+	const [ratioThreshold, setRatioThreshold] = useState(loadRatioThreshold)
+	const [ratioPopupAnchor, setRatioPopupAnchor] = useState<HTMLElement | null>(null)
 
 	const { data: categories = {} } = useCategories()
 	const { data: tags = [] } = useTags()
@@ -344,13 +348,35 @@ export function TorrentList() {
 									</button>
 								</th>
 								<th className="px-3 py-2.5 text-left whitespace-nowrap">
+									<div className="flex items-center gap-1">
+										<button
+											onClick={() => handleSort('ratio')}
+											className="flex items-center gap-2 text-[9px] font-medium uppercase tracking-widest transition-colors"
+											style={{ color: 'var(--text-muted)' }}
+										>
+											Ratio
+											<SortIcon active={sortKey === 'ratio'} asc={sortAsc} />
+										</button>
+										<button
+											onClick={(e) => setRatioPopupAnchor(e.currentTarget)}
+											className="p-0.5 rounded opacity-50 hover:opacity-100 transition-opacity"
+											title="Configure ratio colors"
+										>
+											<svg className="w-3 h-3" style={{ color: 'var(--text-muted)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+												<path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+												<path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+											</svg>
+										</button>
+									</div>
+								</th>
+								<th className="px-3 py-2.5 text-left whitespace-nowrap">
 									<button
-										onClick={() => handleSort('ratio')}
+										onClick={() => handleSort('seeding_time')}
 										className="flex items-center gap-2 text-[9px] font-medium uppercase tracking-widest transition-colors"
 										style={{ color: 'var(--text-muted)' }}
 									>
-										Ratio
-										<SortIcon active={sortKey === 'ratio'} asc={sortAsc} />
+										Seed Time
+										<SortIcon active={sortKey === 'seeding_time'} asc={sortAsc} />
 									</button>
 								</th>
 								<th className="px-3 py-2.5 text-left whitespace-nowrap">
@@ -373,6 +399,7 @@ export function TorrentList() {
 									selected={selected.has(t.hash)}
 									onSelect={handleSelect}
 									onContextMenu={(e) => handleContextMenu(e, t)}
+									ratioThreshold={ratioThreshold}
 								/>
 							))}
 						</tbody>
@@ -441,6 +468,15 @@ export function TorrentList() {
 					y={contextMenu.y}
 					torrents={contextMenu.torrents}
 					onClose={() => setContextMenu(null)}
+				/>
+			)}
+
+			{ratioPopupAnchor && (
+				<RatioThresholdPopup
+					anchor={ratioPopupAnchor}
+					threshold={ratioThreshold}
+					onSave={(t) => { saveRatioThreshold(t); setRatioThreshold(t) }}
+					onClose={() => setRatioPopupAnchor(null)}
 				/>
 			)}
 		</div>

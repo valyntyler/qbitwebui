@@ -1,5 +1,5 @@
 import type { Torrent, TorrentState } from '../types/qbittorrent'
-import { formatSpeed, formatSize, formatEta, formatDate, formatRelativeTime } from '../utils/format'
+import { formatSpeed, formatSize, formatEta, formatDate, formatRelativeTime, formatDuration } from '../utils/format'
 
 type StateType = 'accent' | 'warning' | 'muted' | 'info' | 'error'
 
@@ -46,13 +46,16 @@ interface Props {
 	selected: boolean
 	onSelect: (hash: string, multi: boolean) => void
 	onContextMenu: (e: React.MouseEvent) => void
+	ratioThreshold: number
 }
 
-export function TorrentRow({ torrent, selected, onSelect, onContextMenu }: Props) {
+export function TorrentRow({ torrent, selected, onSelect, onContextMenu, ratioThreshold }: Props) {
 	const { label, type, isDownloading } = getStateInfo(torrent.state)
 	const progress = Math.round(torrent.progress * 100)
 	const isComplete = progress >= 100
 	const stateColor = getColor(type)
+	const ratioRounded = Math.round(torrent.ratio * 100) / 100
+	const ratioColor = ratioRounded >= ratioThreshold ? '#a6e3a1' : '#f38ba8'
 
 	return (
 		<tr
@@ -137,8 +140,13 @@ export function TorrentRow({ torrent, selected, onSelect, onContextMenu }: Props
 				</span>
 			</td>
 			<td className="px-3 py-3">
-				<span className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>
+				<span className="text-xs font-mono font-medium" style={{ color: ratioColor }}>
 					{torrent.ratio.toFixed(2)}
+				</span>
+			</td>
+			<td className="px-3 py-3">
+				<span className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>
+					{formatDuration(torrent.seeding_time)}
 				</span>
 			</td>
 			<td className="px-3 py-3">
