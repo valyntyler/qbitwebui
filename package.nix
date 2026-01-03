@@ -1,7 +1,4 @@
 {
-  port,
-  dbPath,
-  saltPath,
   pkgs,
   bun2nix,
   wrappers,
@@ -24,9 +21,6 @@ in
   wrappers.lib.wrapPackage {
     inherit pkgs package;
     env = {
-      DATABASE_PATH = dbPath;
-      SALT_PATH = saltPath;
-      PORT = port;
       NODE_ENV = "production";
       ENCRYPTION_KEY = "${pkgs.openssl} rand -hex 32"; # this is a BAD idea
     };

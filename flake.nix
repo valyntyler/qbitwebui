@@ -27,9 +27,6 @@
           default = qbitwebui;
           qbitwebui = pkgs.callPackage ./package.nix {
             inherit pkgs wrappers;
-            port = 8182;
-            dbPath = "$HOME/.local/share/qbitwebui/data";
-            saltPath = "$HOME/.local/share/qbitwebui/data";
             bun2nix = bun2nix.packages.${system}.default;
           };
         };
