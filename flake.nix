@@ -29,10 +29,7 @@
         };
         packages = rec {
           default = qbitwebui;
-          qbitwebui = pkgs.callPackage ./qbitwebui.nix {
-            bun2nix = bun2nix.packages.${system}.default;
-          };
-          qbitwebui-server = pkgs.callPackage ./qbitwebui-server.nix {
+          qbitwebui = pkgs.callPackage ./package.nix {
             inherit pkgs wrappers;
             bun2nix = bun2nix.packages.${system}.default;
           };
