@@ -1,6 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    wrappers.url = "github:lassulus/wrappers";
 
     bun2nix.url = "github:nix-community/bun2nix";
     bun2nix.inputs.nixpkgs.follows = "nixpkgs";
@@ -11,6 +12,7 @@
   outputs = {
     bun2nix,
     nixpkgs,
+    wrappers,
     flake-utils,
     ...
   }:
@@ -27,7 +29,11 @@
         };
         packages = rec {
           default = qbitwebui;
-          qbitwebui = pkgs.callPackage ./package.nix {
+          qbitwebui = pkgs.callPackage ./qbitwebui.nix {
+            bun2nix = bun2nix.packages.${system}.default;
+          };
+          qbitwebui-server = pkgs.callPackage ./qbitwebui-server.nix {
+            inherit pkgs wrappers;
             bun2nix = bun2nix.packages.${system}.default;
           };
         };
