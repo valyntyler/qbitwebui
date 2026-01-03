@@ -1,4 +1,7 @@
 {
+  port,
+  dbPath,
+  saltPath,
   pkgs,
   bun2nix,
   wrappers,
@@ -21,9 +24,9 @@ in
   wrappers.lib.wrapPackage {
     inherit pkgs package;
     env = {
-      DATABASE_PATH = "$HOME/.local/share/qbitwebui/data";
-      SALT_PATH = "$HOME/.local/share/qbitwebui/data";
-      PORT = 8182;
+      DATABASE_PATH = dbPath;
+      SALT_PATH = saltPath;
+      PORT = port;
       NODE_ENV = "production";
     };
   }
