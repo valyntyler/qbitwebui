@@ -28,5 +28,6 @@ in
       SALT_PATH = saltPath;
       PORT = port;
       NODE_ENV = "production";
+      ENCRYPTION_KEY = "${pkgs.openssl} rand -hex 32"; # this is a BAD idea
     };
   }
