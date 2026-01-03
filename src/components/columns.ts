@@ -1,4 +1,4 @@
-export type SortKey = 'name' | 'size' | 'progress' | 'downloaded' | 'uploaded' | 'dlspeed' | 'upspeed' | 'ratio' | 'state' | 'category' | 'tags' | 'num_seeds' | 'num_leechs' | 'last_activity' | 'save_path' | 'tracker' | 'seeding_time' | 'added_on' | 'completion_on'
+export type SortKey = 'name' | 'size' | 'progress' | 'downloaded' | 'uploaded' | 'dlspeed' | 'upspeed' | 'ratio' | 'state' | 'category' | 'tags' | 'num_seeds' | 'num_leechs' | 'last_activity' | 'save_path' | 'tracker' | 'seeding_time' | 'added_on' | 'completion_on' | 'eta'
 
 export interface ColumnDef {
 	id: string
@@ -8,6 +8,7 @@ export interface ColumnDef {
 
 export const COLUMNS: ColumnDef[] = [
 	{ id: 'progress', label: 'Progress', sortKey: 'progress' },
+	{ id: 'eta', label: 'ETA', sortKey: 'eta' },
 	{ id: 'status', label: 'Status', sortKey: null },
 	{ id: 'size', label: 'Size', sortKey: 'size' },
 	{ id: 'downloaded', label: 'Down', sortKey: 'downloaded' },

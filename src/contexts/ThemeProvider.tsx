@@ -17,6 +17,7 @@ function applyTheme(colors: typeof themes[0]['colors']) {
 	root.style.setProperty('--warning', colors.warning)
 	root.style.setProperty('--error', colors.error)
 	root.style.setProperty('--border', colors.border)
+	root.style.setProperty('--progress', colors.progress)
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { useCategories, useTags, useStartTorrents, useStopTorrents, useSetCategory, useAddTags, useRemoveTags, useRenameTorrent } from '../hooks/useTorrents'
+import { useCategories, useTags, useStartTorrents, useStopTorrents, useDeleteTorrents, useSetCategory, useAddTags, useRemoveTags, useRenameTorrent } from '../hooks/useTorrents'
 import type { Torrent } from '../types/qbittorrent'
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 	onClose: () => void
 }
 
-type Submenu = 'category' | 'addTag' | 'removeTag' | null
+type Submenu = 'category' | 'addTag' | 'removeTag' | 'delete' | null
 
 export function ContextMenu({ x, y, torrents, onClose }: Props) {
 	const [submenu, setSubmenu] = useState<Submenu>(null)
@@ -26,6 +26,7 @@ export function ContextMenu({ x, y, torrents, onClose }: Props) {
 	const addTagsMutation = useAddTags()
 	const removeTagsMutation = useRemoveTags()
 	const renameMutation = useRenameTorrent()
+	const deleteMutation = useDeleteTorrents()
 
 	const hashes = torrents.map(t => t.hash)
 	const isSingle = torrents.length === 1
@@ -99,6 +100,11 @@ export function ContextMenu({ x, y, torrents, onClose }: Props) {
 		setSubmenu(null)
 	}
 
+	function handleDelete(deleteFiles: boolean) {
+		deleteMutation.mutate({ hashes, deleteFiles })
+		onClose()
+	}
+
 	if (renaming && isSingle) {
 		return (
 			<div ref={ref} className="rounded-lg border shadow-xl z-[200] p-3" style={menuStyle}>
@@ -169,6 +175,16 @@ export function ContextMenu({ x, y, torrents, onClose }: Props) {
 					<div className="h-px my-1" style={{ backgroundColor: 'var(--border)' }} />
 					<MenuItem onClick={startRename}>Rename</MenuItem>
 				</>
+			)}
+			<div className="h-px my-1" style={{ backgroundColor: 'var(--border)' }} />
+			<MenuItem onClick={() => setSubmenu(submenu === 'delete' ? null : 'delete')} hasSubmenu>
+				Delete
+			</MenuItem>
+			{submenu === 'delete' && (
+				<div className="pl-2">
+					<MenuItem onClick={() => handleDelete(false)} small>Keep files</MenuItem>
+					<MenuItem onClick={() => handleDelete(true)} small>Delete files</MenuItem>
+				</div>
 			)}
 		</div>
 	)

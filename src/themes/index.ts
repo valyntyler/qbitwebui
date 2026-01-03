@@ -13,6 +13,7 @@ export interface Theme {
 		warning: string
 		error: string
 		border: string
+		progress: string
 	}
 }
 
@@ -32,6 +33,7 @@ export const themes: Theme[] = [
 			warning: '#f7b731',
 			error: '#f43f5e',
 			border: '#ffffff12',
+			progress: '#00d4aa',
 		},
 	},
 	{
@@ -49,6 +51,7 @@ export const themes: Theme[] = [
 			warning: '#f9e2af',
 			error: '#f38ba8',
 			border: '#45475a',
+			progress: '#a6e3a1',
 		},
 	},
 	{
@@ -66,6 +69,7 @@ export const themes: Theme[] = [
 			warning: '#f1fa8c',
 			error: '#ff5555',
 			border: '#44475a',
+			progress: '#50fa7b',
 		},
 	},
 	{
@@ -83,6 +87,7 @@ export const themes: Theme[] = [
 			warning: '#ebcb8b',
 			error: '#bf616a',
 			border: '#434c5e',
+			progress: '#a3be8c',
 		},
 	},
 	{
@@ -100,6 +105,7 @@ export const themes: Theme[] = [
 			warning: '#fabd2f',
 			error: '#fb4934',
 			border: '#504945',
+			progress: '#b8bb26',
 		},
 	},
 ]

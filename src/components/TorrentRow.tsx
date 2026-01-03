@@ -63,19 +63,25 @@ function renderCell(columnId: string, torrent: Torrent, ctx: CellContext): React
 					<span className="text-xs font-medium" style={{ color: 'var(--accent)' }}>Complete</span>
 				</div>
 			) : (
-				<div className="space-y-1">
-					<div className="flex items-center gap-2">
-						<div className="relative w-20 h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--bg-tertiary)' }}>
-							<div
-								className="absolute inset-y-0 left-0 rounded-full transition-all duration-300 progress-glow"
-								style={{ width: `${ctx.progress}%`, backgroundColor: ctx.stateColor }}
-							/>
-						</div>
-						<span className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>{ctx.progress}%</span>
+				<div className="group/progress relative flex items-center gap-2">
+					<div className="w-20 h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--bg-tertiary)' }}>
+						<div
+							className="h-full rounded-full"
+							style={{ width: `${ctx.progress}%`, backgroundColor: 'var(--progress)' }}
+						/>
 					</div>
-					<span className="text-[10px] font-mono" style={{ color: 'var(--text-muted)' }}>{formatEta(torrent.eta)}</span>
+					<span className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>{ctx.progress}%</span>
+					{torrent.eta > 0 && torrent.eta < 8640000 && (
+						<div className="absolute left-0 -top-8 opacity-0 group-hover/progress:opacity-100 transition-opacity pointer-events-none z-50">
+							<div className="px-2 py-1 rounded text-xs font-mono whitespace-nowrap" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)', color: 'var(--text-primary)' }}>
+								ETA: {formatEta(torrent.eta)}
+							</div>
+						</div>
+					)}
 				</div>
 			)
+		case 'eta':
+			return <span className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>{torrent.eta > 0 && torrent.eta < 8640000 ? formatEta(torrent.eta) : '—'}</span>
 		case 'status':
 			return (
 				<span
